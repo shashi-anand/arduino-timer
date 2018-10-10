@@ -46,10 +46,13 @@ void loop() {
   else
     digitalWrite(LED_BUILTIN, LOW);
 
-  if (isAlarmRange(dt))   // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
+  if (isAlarmRange(dt))  { // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
+    Serial.println("In Alarm range TRUE");
     triggerRelay(true);  
-  else 
+  } else {
+    Serial.println("In Alarm range FALSE");
     triggerRelay(false);  
+  }
     
   delay(60000);  // sleep for 1 minutes before checking again
 }
@@ -57,28 +60,38 @@ void loop() {
 boolean isAlarmRange(RTCDateTime dt) {
   if (dt.hour >= MORNING_ALARM_HOUR_ST && dt.hour <= MORNING_ALARM_HOUR_EN) { // within morning alarm hour range
     if (dt.hour == MORNING_ALARM_HOUR_EN)         // current hour equal alarm end hour
-      if (dt.minute <= MORNING_ALARM_MINUTES_EN)  // current minute within alarm end minute 
+      if (dt.minute <= MORNING_ALARM_MINUTES_EN) { // current minute within alarm end minute 
+        Serial.println("1");
         return true;
+      }
       else 
         return false;
     if (dt.hour == MORNING_ALARM_HOUR_ST )
-      if (dt.minute >= MORNING_ALARM_MINUTES_ST)  // current minute within alarm end minute 
+      if (dt.minute >= MORNING_ALARM_MINUTES_ST) { // current minute within alarm end minute 
+        Serial.println("2");
         return true;
+      }
       else 
         return false;
+    Serial.println("3");
     return true;
   } else 
     if (dt.hour >= EVENING_ALARM_HOUR_ST && dt.hour <= EVENING_ALARM_HOUR_EN) { // within evening alarm hour range
       if (dt.hour == EVENING_ALARM_HOUR_EN) // current hour equal alarm end hour
-        if (dt.minute <= EVENING_ALARM_MINUTES_EN)  // current minute within alarm end minute
+        if (dt.minute <= EVENING_ALARM_MINUTES_EN) { // current minute within alarm end minute
+          Serial.println("4");
           return true;
-        else                                          // current hour less than alarm end hour
+        }
+        else                                        // current hour less than alarm end hour
           return false;
       if (dt.hour == EVENING_ALARM_HOUR_ST )
-        if (dt.minute >= EVENING_ALARM_MINUTES_ST)  // current minute within alarm end minute 
+        if (dt.minute >= EVENING_ALARM_MINUTES_ST) { // current minute within alarm end minute 
+          Serial.println("5");
           return true;
+        }
         else 
           return false;
+      Serial.println("6");
       return true;
     } else
       return false;                             
@@ -92,11 +105,10 @@ boolean isValidDataTime(RTCDateTime dt) {
 }
 
 void triggerRelay(bool on) {
-  if (on) {
+  if (on)
     digitalWrite(MOTOR_RELAY_PIN, HIGH);   // turns on motor
-  } else {
+  else 
     digitalWrite(MOTOR_RELAY_PIN, LOW);   // turn off motor
-  }
 }
 
 void initializeTime() {
