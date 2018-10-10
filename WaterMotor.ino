@@ -6,18 +6,18 @@ DS3231 clock;
 /* Relay switch on/off pin to use */
 #define MOTOR_RELAY_PIN 7
 
-const int  MORNING_ALARM_HOUR = 5;
-const int  MORNING_ALARM_MINUTES = 10;
+const int  MORNING_ALARM_HOUR = 6;
+const int  MORNING_ALARM_MINUTES = 0;
 
 const int EVENING_ALARM_HOUR = 16;
-const int EVENING_ALARM_MINUTES = 15;
+const int EVENING_ALARM_MINUTES = 0;
 
-const long TIME_TO_RUN_MOTOR_MORNING = 3000000; //50 minutes = 50*60*1000
-const long TIME_TO_RUN_MOTOR_EVENING = 1800000; //30 minutes = 30*60*1000
+const long TIME_TO_RUN_MOTOR_MORNING = 5400000; //90 minutes = 90*60*1000
+const long TIME_TO_RUN_MOTOR_EVENING = 3600000; //60 minutes = 60*60*1000
 /* Using Normally Closed(NC) on relay */
 
 void setup() {
-  pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin 13 as output
+  pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin as output
   digitalWrite(MOTOR_RELAY_PIN, LOW);       // offs motor
   
   pinMode(LED_BUILTIN, OUTPUT);          // sets the digital pin as output
@@ -44,7 +44,7 @@ void loop() {
     digitalWrite(LED_BUILTIN, HIGH);
   else
     digitalWrite(LED_BUILTIN, LOW);
-  
+
   if (clock.isAlarm1()) {  // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
     triggerRelay(true);  
     delay(TIME_TO_RUN_MOTOR_MORNING);
@@ -86,7 +86,7 @@ void setMorningAlarm() {
 
 void initializeTime() {
   // Manual (Year, Month, Day, Hour, Minute, Second)
-  clock.setDateTime(2018, 4, 30, 19, 21, 0);
+  clock.setDateTime(2018, 10, 7, 15, 58, 0);
 }
 
 void clearAnyExistingAlarms() {
