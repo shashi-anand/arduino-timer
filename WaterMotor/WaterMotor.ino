@@ -90,7 +90,7 @@ boolean isAlarmRange(RTCDateTime dt) {
 }
 
 boolean isValidDataTime(RTCDateTime dt) {
-  String msg = String(String(dt.month) + " " + String(dt.day) + " "+ String(dt.year) + " " + String(dt.hour) + " " + String(dt.minute));
+  String msg = String(String(dt.month) + " " + String(dt.day) + " "+ String(dt.year) + " " + String(dt.hour) + ":" + String(dt.minute));
   Serial.println(msg);
   if (dt.month == 01 && dt.day == 01 && dt.year == 2000)
     return false;
