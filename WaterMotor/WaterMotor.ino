@@ -18,42 +18,34 @@ const int EVENING_ALARM_MINUTES_EN = 0;
 
 /* Using Normally Closed(NC) on relay */
 
-void setup() {
-  pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin as output
-  digitalWrite(MOTOR_RELAY_PIN, LOW);       // offs motor
-  
-  pinMode(LED_BUILTIN, OUTPUT);          // sets the digital pin as output
-  digitalWrite(LED_BUILTIN, LOW);       // offs error led to start with
+RTCDateTime dt;
 
+void setup() {
+  pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin as output  
+  pinMode(LED_BUILTIN, OUTPUT);          // sets the digital pin as output
+  
+  digitalWrite(LED_BUILTIN, LOW);       // offs error led to start with
   Serial.begin(9600);
   clock.begin();
-  
-  RTCDateTime dt;
-  dt = clock.getDateTime();
-  Serial.println(clock.dateFormat("d-m-Y H:i:s - l", dt));
-  
   //initializeTime(); // comment this line after one time execution to set initial time of RTC
 }
 
 void loop() {
-  RTCDateTime dt;
-  dt = clock.getDateTime();
-  
-  Serial.println(clock.dateFormat("d-m-Y H:i:s - l", dt));
+  dt = clock.getDateTime();  
+  Serial.println(clock.dateFormat("d F Y H:i:s", dt));
   
   if (! isValidDataTime(dt))
     digitalWrite(LED_BUILTIN, HIGH);
-  else
+  else {
     digitalWrite(LED_BUILTIN, LOW);
-
-  if (isAlarmRange(dt))  { // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
-    Serial.println("In Alarm range TRUE");
-    triggerRelay(true);  
-  } else {
-    Serial.println("In Alarm range FALSE");
-    triggerRelay(false);  
-  }
-    
+    if (isAlarmRange(dt))  { // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
+      Serial.println("In Alarm range TRUE");
+      triggerRelay(true);  
+    } else {
+      Serial.println("In Alarm range FALSE");
+      triggerRelay(false);  
+    }
+  }  
   delay(60000);  // sleep for 1 minutes before checking again
 }
 
@@ -98,6 +90,8 @@ boolean isAlarmRange(RTCDateTime dt) {
 }
 
 boolean isValidDataTime(RTCDateTime dt) {
+  String msg = String(String(dt.month) + " " + String(dt.day) + " "+ String(dt.year) + " " + String(dt.hour) + " " + String(dt.minute));
+  Serial.println(msg);
   if (dt.month == 01 && dt.day == 01 && dt.year == 2000)
     return false;
   else 
