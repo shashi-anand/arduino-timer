@@ -6,9 +6,9 @@ DS3231 clock;
 /* Relay switch on/off pin to use */
 #define MOTOR_RELAY_PIN 7
 
-const int  MORNING_ALARM_HOUR_ST = 6;
+const int  MORNING_ALARM_HOUR_ST = 5;
 const int  MORNING_ALARM_MINUTES_ST = 0;
-const int  MORNING_ALARM_HOUR_EN = 7;
+const int  MORNING_ALARM_HOUR_EN = 6;
 const int  MORNING_ALARM_MINUTES_EN = 30;
 
 const int EVENING_ALARM_HOUR_ST = 16;
