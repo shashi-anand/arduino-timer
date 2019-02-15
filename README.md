@@ -11,4 +11,4 @@ MORNING_ALARM_HOUR along with MORNING_ALARM_MINUTES defines the morning alarm ti
 EVENING_ALARM_HOUR along with EVENING_ALARM_MINUTES defines the evening alarm time
 
 TIME_TO_RUN_MOTOR_MORNING defines the time motor should stay on once it is switched on at an alarm
-
+DUMMY CHANGE TO TEST GIT 
