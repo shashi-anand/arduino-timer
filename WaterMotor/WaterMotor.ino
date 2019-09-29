@@ -6,15 +6,15 @@ DS3231 clock;
 /* Relay switch on/off pin to use */
 #define MOTOR_RELAY_PIN 7
 
-const int  MORNING_ALARM_HOUR_ST = 5;
+const int  MORNING_ALARM_HOUR_ST = 6;
 const int  MORNING_ALARM_MINUTES_ST = 0;
 const int  MORNING_ALARM_HOUR_EN = 6;
-const int  MORNING_ALARM_MINUTES_EN = 30;
+const int  MORNING_ALARM_MINUTES_EN = 45;
 
-const int EVENING_ALARM_HOUR_ST = 16;
-const int EVENING_ALARM_MINUTES_ST = 0;
-const int EVENING_ALARM_HOUR_EN = 17;
-const int EVENING_ALARM_MINUTES_EN = 0;
+const int EVENING_ALARM_HOUR_ST = 18;
+const int EVENING_ALARM_MINUTES_ST = 05;
+const int EVENING_ALARM_HOUR_EN = 19;
+const int EVENING_ALARM_MINUTES_EN = 00;
 
 /* Using Normally Closed(NC) on relay */
 
@@ -107,5 +107,5 @@ void triggerRelay(bool on) {
 
 void initializeTime() {
   // Manual (Year, Month, Day, Hour, Minute, Second)
-  clock.setDateTime(2018, 10, 11, 00, 10, 0);
+  clock.setDateTime(2019, 9, 29, 9, 29, 0);
 }
