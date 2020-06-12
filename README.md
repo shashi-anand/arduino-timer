@@ -9,6 +9,3 @@ Arduino relay is defined by MOTOR_RELAY_PIN in code as pin 7
 
 MORNING_ALARM_HOUR along with MORNING_ALARM_MINUTES defines the morning alarm time
 EVENING_ALARM_HOUR along with EVENING_ALARM_MINUTES defines the evening alarm time
-
-TIME_TO_RUN_MOTOR_MORNING defines the time motor should stay on once it is switched on at an alarm
-
