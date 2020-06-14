@@ -55,7 +55,7 @@ boolean isInAlarmRange(RTCDateTime dt) {
             Serial.println("In morning alarm range");
             return true;
        } else if ((dt.hour >= EVENING_ALARM_HOUR_ST && dt.hour <= EVENING_ALARM_HOUR_EN) && 
-                  (dt.minute <= EVENING_ALARM_MINUTES_EN && dt.minute <= EVENING_ALARM_MINUTES_EN) ) {
+                  (dt.minute >= EVENING_ALARM_MINUTES_ST && dt.minute <= EVENING_ALARM_MINUTES_EN) ) {
             Serial.println("In evevning alarm range");
             return true;
        } 
