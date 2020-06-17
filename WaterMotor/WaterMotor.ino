@@ -73,11 +73,11 @@ boolean isValidDataTime(RTCDateTime dt) {
 }
 
 void switchOnMotor(){
-  digitalWrite(MOTOR_RELAY_PIN, HIGH);   // normally open gets closed 
+  digitalWrite(MOTOR_RELAY_PIN, HIGH);   // normally closed on relay closed
 }
 
 void switchOffMotor(){
-  digitalWrite(MOTOR_RELAY_PIN, LOW);   // normally open gets closed 
+  digitalWrite(MOTOR_RELAY_PIN, LOW);   // normally closed on relay open
 }
 
 void initializeTime() {
