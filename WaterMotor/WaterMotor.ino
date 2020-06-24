@@ -9,16 +9,15 @@ DS3231 clock;
 const int  MORNING_ALARM_HOUR_ST = 6;
 const int  MORNING_ALARM_MINUTES_ST = 5;
 const int  MORNING_ALARM_HOUR_EN = 6;
-const int  MORNING_ALARM_MINUTES_EN = 50;
+const int  MORNING_ALARM_MINUTES_EN = 50; // Make sure this is higher number like 58,59
 
 const int EVENING_ALARM_HOUR_ST = 18;
 const int EVENING_ALARM_MINUTES_ST = 05;
 const int EVENING_ALARM_HOUR_EN = 19;
-const int EVENING_ALARM_MINUTES_EN = 00;
+const int EVENING_ALARM_MINUTES_EN = 59;  // Make sure this is higher number like 58,59
 
 /* Using Normally Closed(NC) on relay */
 
-RTCDateTime dt;
 
 void setup() {
   pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin as output  
@@ -31,12 +30,11 @@ void setup() {
 }
 
 void loop() {
-  dt = clock.getDateTime();  
-  Serial.println(clock.dateFormat("d F Y H:i:s", dt));
+  RTCDateTime dt = clock.getDateTime();  
+  Serial.println("System clock: ");
+  printDate(dt);
   
-  if (! isValidDataTime(dt))
-    digitalWrite(LED_BUILTIN, HIGH);
-  else {
+  if (isValidDataTime(dt)){
     digitalWrite(LED_BUILTIN, LOW);
     if (isInAlarmRange(dt))  { // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
       Serial.println("In Alarm range TRUE");
@@ -45,6 +43,8 @@ void loop() {
       Serial.println("In Alarm range FALSE");
       switchOffMotor();  
     }
+  } else {
+    digitalWrite(LED_BUILTIN, HIGH);
   }  
   delay(60000);  // sleep for 1 minutes before checking again
 }
@@ -64,20 +64,23 @@ boolean isInAlarmRange(RTCDateTime dt) {
 }
 
 boolean isValidDataTime(RTCDateTime dt) {
-  String msg = String(String(dt.month) + " " + String(dt.day) + " "+ String(dt.year) + " " + String(dt.hour) + ":" + String(dt.minute));
-  Serial.println(msg);
   if (dt.month == 01 && dt.day == 01 && dt.year == 2000)
     return false;
   else 
     return true;
 }
 
+void printDate(RTCDateTime dt){
+  String msg = String(String(dt.month) + " " + String(dt.day) + " "+ String(dt.year) + " " + String(dt.hour) + ":" + String(dt.minute));
+  Serial.println(msg);
+}
+
 void switchOnMotor(){
-  digitalWrite(MOTOR_RELAY_PIN, HIGH);   // normally closed on relay closed
+  digitalWrite(MOTOR_RELAY_PIN, HIGH);   // normally open gets closed 
 }
 
 void switchOffMotor(){
-  digitalWrite(MOTOR_RELAY_PIN, LOW);   // normally closed on relay open
+  digitalWrite(MOTOR_RELAY_PIN, LOW);   // normally open gets closed 
 }
 
 void initializeTime() {
