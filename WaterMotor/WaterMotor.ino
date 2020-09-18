@@ -1,5 +1,3 @@
-#include <DS3231.h>
-
 #include <DS3231.h> // uses https://github.com/jarzebski/Arduino-DS3231
 
 /* Create an rtc object */
@@ -10,16 +8,15 @@ DS3231 clock;
 
 const int  MORNING_ALARM_HOUR_ST = 6;
 const int  MORNING_ALARM_MINUTES_ST = 10;
-const int  MORNING_ALARM_HOUR_EN = 6;
-const int  MORNING_ALARM_MINUTES_EN = 45; // Make sure this is higher number like 58,59
+const int  MORNING_ALARM_HOUR_EN = 7;
+const int  MORNING_ALARM_MINUTES_EN = 30; // Make sure this is higher number like 58,59
 
 const int EVENING_ALARM_HOUR_ST = 18;
-const int EVENING_ALARM_MINUTES_ST = 10;
+const int EVENING_ALARM_MINUTES_ST = 15;
 const int EVENING_ALARM_HOUR_EN = 19;
-const int EVENING_ALARM_MINUTES_EN = 10;  // Make sure this is higher number like 58,59
+const int EVENING_ALARM_MINUTES_EN = 15;  // Make sure this is higher number like 58,59
 
 /* Using Normally Closed(NC) on relay */
-
 
 void setup() {
   pinMode(MOTOR_RELAY_PIN, OUTPUT);          // sets the digital pin as output
@@ -36,54 +33,51 @@ void loop() {
   Serial.println("System clock: ");
   printDate(dt);
 
-  if (isValidDataTime(dt)) {
+  if (!isValidDataTime(dt)) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
     digitalWrite(LED_BUILTIN, LOW);
-    if (isInAlarmRange(dt))  { // if morning or eve alarm then wait for timetorun motor and then switch off relay to stop motor
-      Serial.println("In Alarm range TRUE");
+    if (isInAlarmRange(dt)){
       switchOnMotor();
     } else {
-      Serial.println("In Alarm range FALSE");
       switchOffMotor();
     }
-  } else {
-    digitalWrite(LED_BUILTIN, HIGH);
   }
   delay(60000);  // sleep for 1 minutes before checking again
 }
 
-boolean isInAlarmRange(RTCDateTime dt) {
-  if (dt.hour == MORNING_ALARM_HOUR_ST && dt.hour == MORNING_ALARM_HOUR_EN){
-    if (dt.minute < MORNING_ALARM_MINUTES_EN){
-      Serial.println("In morning alarm range");
+boolean isInAlarmRange(RTCDateTime dt){
+  if (isInAlarmRange(dt, MORNING_ALARM_HOUR_ST, MORNING_ALARM_MINUTES_ST, MORNING_ALARM_HOUR_EN, MORNING_ALARM_MINUTES_EN)){
+    Serial.println("In morning alarm range");
+    return true;  
+  } else if (isInAlarmRange(dt, EVENING_ALARM_HOUR_ST, EVENING_ALARM_MINUTES_ST, EVENING_ALARM_HOUR_EN, EVENING_ALARM_MINUTES_EN)){
+    Serial.println("In evening alarm range");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+boolean isInAlarmRange(RTCDateTime dt, int startHour, int startMinute, int endHour, int endMinute) {
+  int currentHour = dt.hour;
+  int currentMinute = dt.minute;
+  return isInAlarmRange(currentHour, currentMinute, startHour, startMinute, endHour, endMinute);
+}
+
+boolean isInAlarmRange(int currentHour, int currentMinute, int startHour, int startMinute, int endHour, int endMinute) {
+  if (currentHour == startHour && currentHour == endHour){
+    if (currentMinute > startMinute && currentMinute < endMinute){
       return true;
     }
-  } else if ( (dt.hour >= MORNING_ALARM_HOUR_ST && dt.hour < MORNING_ALARM_HOUR_EN)){
-    if (dt.minute >= MORNING_ALARM_MINUTES_ST){
-      Serial.println("In morning alarm range");
+  } else if (currentHour >= startHour && currentHour < endHour){
+    if (currentMinute >= startMinute){
       return true;
     }
-  } else if (dt.hour == MORNING_ALARM_HOUR_EN){
-    if (dt.minute < MORNING_ALARM_MINUTES_EN){
-      Serial.println("In morning alarm range");
-      return true;
-    }
-  } else if (dt.hour == EVENING_ALARM_HOUR_ST && dt.hour == EVENING_ALARM_HOUR_EN){
-    if (dt.minute < EVENING_ALARM_MINUTES_EN){
-      Serial.println("In evening alarm range");
-      return true;
-    }
-  } else if ((dt.hour >= EVENING_ALARM_HOUR_ST && dt.hour < EVENING_ALARM_HOUR_EN)){
-    if (dt.minute >= EVENING_ALARM_MINUTES_ST){
-      Serial.println("In evening alarm range");
-      return true;
-    }
-  } else if (dt.hour == EVENING_ALARM_HOUR_EN){
-    if (dt.minute < EVENING_ALARM_MINUTES_EN){
-      Serial.println("In evening alarm range");
+  } else if (currentHour == endHour){
+    if (currentMinute < endMinute){
       return true;
     }
   } else {
-    Serial.println("NOT in alarm range");
     return false;
   }
 }
