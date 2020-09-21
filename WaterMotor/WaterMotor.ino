@@ -66,20 +66,26 @@ boolean isInAlarmRange(RTCDateTime dt, int startHour, int startMinute, int endHo
 
 boolean isInAlarmRange(int currentHour, int currentMinute, int startHour, int startMinute, int endHour, int endMinute) {
   if (currentHour == startHour && currentHour == endHour){
-    if (currentMinute > startMinute && currentMinute < endMinute){
+    if (currentMinute >= startMinute && currentMinute <= endMinute){
       return true;
     }
-  } else if (currentHour >= startHour && currentHour < endHour){
+  }
+  if (currentHour == startHour){
     if (currentMinute >= startMinute){
       return true;
     }
-  } else if (currentHour == endHour){
-    if (currentMinute < endMinute){
+  } 
+  if (currentHour == endHour){
+    if (currentMinute <= endMinute){
       return true;
     }
-  } else {
-    return false;
-  }
+  } 
+  if (currentHour > startHour && currentHour < endHour){
+    if (currentMinute >= startMinute){
+      return true;
+    }
+  } 
+  return false;
 }
 
 boolean isValidDataTime(RTCDateTime dt) {
