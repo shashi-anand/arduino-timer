@@ -110,5 +110,5 @@ void switchOffMotor() {
 
 void initializeTime() {
   // Manual (Year, Month, Day, Hour, Minute, Second)
-  clock.setDateTime(2020, 10, 25, 22, 27, 0);
+  clock.setDateTime(2020, 12, 21, 16, 48, 45);
 }
