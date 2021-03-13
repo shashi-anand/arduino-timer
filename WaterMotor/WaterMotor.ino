@@ -7,14 +7,14 @@ DS3231 clock;
 #define MOTOR_RELAY_PIN 7
 
 const int  MORNING_ALARM_HOUR_ST = 6;
-const int  MORNING_ALARM_MINUTES_ST = 05;
+const int  MORNING_ALARM_MINUTES_ST = 10;
 const int  MORNING_ALARM_HOUR_EN = 7;
-const int  MORNING_ALARM_MINUTES_EN = 30; // Make sure this is higher number like 58,59
+const int  MORNING_ALARM_MINUTES_EN = 40; // Make sure this is higher number like 58,59
 
 const int EVENING_ALARM_HOUR_ST = 18;
-const int EVENING_ALARM_MINUTES_ST = 05;
+const int EVENING_ALARM_MINUTES_ST = 10;
 const int EVENING_ALARM_HOUR_EN = 19;
-const int EVENING_ALARM_MINUTES_EN = 15;  // Make sure this is higher number like 58,59
+const int EVENING_ALARM_MINUTES_EN = 25;  // Make sure this is higher number like 58,59
 
 /* Using Normally Closed(NC) on relay */
 
@@ -110,5 +110,5 @@ void switchOffMotor() {
 
 void initializeTime() {
   // Manual (Year, Month, Day, Hour, Minute, Second)
-  clock.setDateTime(2020, 12, 21, 16, 48, 45);
+  clock.setDateTime(2021, 03, 13, 12, 32, 00);
 }
